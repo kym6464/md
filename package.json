@@ -1,5 +1,5 @@
 {
-  "name": "md-extract",
+  "name": "@kym6464/md-extract",
   "version": "1.0.0",
   "description": "Extract sections of a markdown file with a regular expression",
   "main": "src/index.js",
