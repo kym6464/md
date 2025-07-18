@@ -1,0 +1,20 @@
+{
+  "name": "md-extract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kym6464/md-extract.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kym6464/md-extract/issues"
+  },
+  "homepage": "https://github.com/kym6464/md-extract#readme",
+  "dependencies": {}
+}
