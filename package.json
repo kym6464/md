@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "md-extract": "./bin/md-extract.js"
+    "md-extract": "bin/md-extract.js"
   },
   "scripts": {
     "test": "node --test tests/*.test.js"
@@ -14,7 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/kym6464/md-extract.git"
   },
-  "keywords": ["markdown", "extract", "cli", "regex", "sections"],
+  "keywords": [
+    "markdown",
+    "extract",
+    "cli",
+    "regex",
+    "sections"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
