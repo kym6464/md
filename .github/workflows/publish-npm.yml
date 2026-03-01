@@ -1,3 +1,4 @@
+# https://docs.npmjs.com/trusted-publishers
 name: Publish to NPM
 
 on:
