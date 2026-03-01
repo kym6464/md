@@ -5,6 +5,13 @@ A markdown CLI that enables efficiently exploring markdown content and extractin
 ## Installation
 
 ```bash
+brew tap kym6464/tap
+brew install md
+```
+
+Or via npm:
+
+```bash
 # Install globally
 npm install -g @kym6464/md
 
@@ -12,7 +19,7 @@ npm install -g @kym6464/md
 npx @kym6464/md extract "pattern" document.md
 ```
 
-Standalone binaries are available on the [releases page](https://github.com/kym6464/md-extract/releases) for Linux, macOS, and Windows.
+Standalone binaries are also available on the [releases page](https://github.com/kym6464/md/releases) for Linux, macOS, and Windows.
 
 ## Usage
 
