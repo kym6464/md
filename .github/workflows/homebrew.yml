@@ -20,6 +20,7 @@ jobs:
           # running the action AND Homebrew tap you want to release to.
           github_token: ${{ secrets.HOMEBREW_PAT }}
 
+          version: ${{ github.event.release.tag_name }}
           install: 'bin.install "md"'
           target_darwin_amd64: true
           target_darwin_arm64: true
