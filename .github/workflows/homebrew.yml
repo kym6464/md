@@ -1,3 +1,5 @@
+name: Homebrew
+
 on:
   release:
     types: [published]
