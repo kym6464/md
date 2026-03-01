@@ -3,12 +3,39 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: Release tag (e.g. v1.1.5)
+      bump:
+        description: Version bump
         required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.bump.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        id: bump
+        run: |
+          npm version ${{ inputs.bump }} -m "v%s"
+          echo "tag=v$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+
+      - name: Push
+        run: git push --follow-tags
+
   build:
+    needs: version
     strategy:
       matrix:
         include:
@@ -41,7 +68,7 @@ jobs:
           path: dist/
 
   release:
-    needs: build
+    needs: [version, build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -56,4 +83,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-        run: gh release create "${{ inputs.tag }}" dist/* --title "${{ inputs.tag }}" --generate-notes
+        run: gh release create "${{ needs.version.outputs.tag }}" dist/* --title "${{ needs.version.outputs.tag }}" --generate-notes
