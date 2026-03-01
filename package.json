@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/kym6464/md-extract#readme",
   "dependencies": {
+    "@toon-format/toon": "^2.1.0",
     "commander": "^12.0.0"
   }
 }

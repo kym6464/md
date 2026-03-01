@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Readable } from 'node:stream';
-import { headingsFromPath, headingsFromStream } from '../src/index.js';
+import { headingsFromPath, headingsFromStream, sectionsFromStream, buildHeadingTree } from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,5 +46,64 @@ describe('headingsFromStream', () => {
             { depth: 2, content: 'Two' },
             { depth: 3, content: 'Three' },
         ]);
+    });
+});
+
+describe('sectionsFromStream', () => {
+    it('should return sections with character counts', async () => {
+        const input = Readable.from('# Intro\nHello world\n## Details\nSome details\n');
+
+        const sections = await sectionsFromStream(input);
+
+        assert.deepStrictEqual(sections, [
+            { heading: 'Intro', depth: 1, chars: '# Intro\nHello world'.length },
+            { heading: 'Details', depth: 2, chars: '## Details\nSome details'.length },
+        ]);
+    });
+
+    it('should skip headings inside code blocks', async () => {
+        const input = Readable.from('# Real\nContent\n```\n# Fake\n```\n');
+
+        const sections = await sectionsFromStream(input);
+
+        assert.strictEqual(sections.length, 1);
+        assert.strictEqual(sections[0].heading, 'Real');
+    });
+});
+
+describe('buildHeadingTree', () => {
+    it('should nest children under parents by depth', () => {
+        const sections = [
+            { heading: 'A', depth: 1, chars: 100 },
+            { heading: 'B', depth: 2, chars: 50 },
+            { heading: 'C', depth: 2, chars: 60 },
+            { heading: 'D', depth: 1, chars: 30 },
+        ];
+
+        const tree = buildHeadingTree(sections);
+
+        assert.deepStrictEqual(tree, [
+            {
+                heading: 'A', chars: 100,
+                children: [
+                    { heading: 'B', chars: 50 },
+                    { heading: 'C', chars: 60 },
+                ]
+            },
+            { heading: 'D', chars: 30 },
+        ]);
+    });
+
+    it('should omit children when empty', () => {
+        const sections = [
+            { heading: 'Leaf', depth: 1, chars: 42 },
+        ];
+
+        const tree = buildHeadingTree(sections);
+
+        assert.deepStrictEqual(tree, [
+            { heading: 'Leaf', chars: 42 },
+        ]);
+        assert.strictEqual(tree[0].children, undefined);
     });
 });

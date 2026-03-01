@@ -95,6 +95,34 @@ It also reads from stdin, so you can pipe content into it:
 curl -sL https://example.com/doc.md | md-headings
 ```
 
+Use `--format json` to get a nested tree with character counts per section (useful for AI agents deciding how to read content):
+
+```console
+$ md-headings --format json my-document.md
+[
+  {
+    "heading": "Welcome",
+    "chars": 86,
+    "children": [
+      { "heading": "Extract me!", "chars": 62 },
+      { "heading": "Another section", "chars": 56 }
+    ]
+  }
+]
+```
+
+Or `--format toon` for a more compact representation:
+
+```console
+$ md-headings --format toon my-document.md
+[1]:
+  - heading: Welcome
+    chars: 86
+    children[2]{heading,chars}:
+      Extract me!,62
+      Another section,56
+```
+
 ### Options
 
 ```
@@ -103,11 +131,12 @@ Usage: md-headings [options] [file]
 List headings in a markdown document
 
 Arguments:
-  file             Path to markdown file (reads from stdin if omitted)
+  file                  Path to markdown file (reads from stdin if omitted)
 
 Options:
-  -V, --version    output the version number
-  -h, --help       display help for command
+  -V, --version         output the version number
+  -f, --format <type>   Output format: plain, json, toon (default: "plain")
+  -h, --help            display help for command
 ```
 
 ## Library Usage

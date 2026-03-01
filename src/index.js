@@ -81,6 +81,81 @@ export function headingsFromPath(filePath) {
     return headingsFromStream(createReadStream(filePath));
 }
 
+export async function sectionsFromStream(input) {
+    const sections = [];
+    let isInsideCodeBlock = false;
+    let currentLines = [];
+    let currentHeading = null;
+
+    const rl = createInterface({
+        input,
+        crlfDelay: Infinity
+    });
+
+    for await (const line of rl) {
+        if (line.startsWith('```')) {
+            isInsideCodeBlock = !isInsideCodeBlock;
+        }
+
+        if (!isInsideCodeBlock) {
+            const heading = tryParseHeading(line);
+
+            if (heading) {
+                if (currentHeading) {
+                    sections.push({
+                        heading: currentHeading.content,
+                        depth: currentHeading.depth,
+                        chars: currentLines.join('\n').length
+                    });
+                }
+                currentHeading = heading;
+                currentLines = [line];
+                continue;
+            }
+        }
+
+        if (currentHeading) {
+            currentLines.push(line);
+        }
+    }
+
+    if (currentHeading) {
+        sections.push({
+            heading: currentHeading.content,
+            depth: currentHeading.depth,
+            chars: currentLines.join('\n').length
+        });
+    }
+
+    return sections;
+}
+
+export function sectionsFromPath(filePath) {
+    return sectionsFromStream(createReadStream(filePath));
+}
+
+export function buildHeadingTree(sections) {
+    const root = { children: [] };
+    const stack = [{ depth: 0, node: root }];
+
+    for (const { heading, depth, chars } of sections) {
+        const node = { heading, chars };
+
+        while (stack.length > 1 && stack[stack.length - 1].depth >= depth) {
+            stack.pop();
+        }
+
+        const parent = stack[stack.length - 1].node;
+        if (!parent.children) {
+            parent.children = [];
+        }
+        parent.children.push(node);
+        stack.push({ depth, node });
+    }
+
+    return root.children;
+}
+
 export async function extractFromStream(input, regex) {
     const state = new State();
 
