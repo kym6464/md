@@ -1,6 +1,6 @@
 # @kym6464/md
 
-Extract sections of a markdown file with a regular expression.
+A markdown CLI that enables efficiently exploring markdown content and extracting sections.
 
 ## Installation
 
@@ -164,4 +164,4 @@ console.log(matches); // Array of matching sections
 
 ## Credits
 
-This code was ported to JavaScript from [sean0x42/markdown-extract](https://github.com/sean0x42/markdown-extract).
+The `extract` code was forked from [sean0x42/markdown-extract](https://github.com/sean0x42/markdown-extract).
