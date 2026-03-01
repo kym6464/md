@@ -52,13 +52,12 @@ class State {
     }
 }
 
-export async function headingsFromPath(filePath) {
+export async function headingsFromStream(input) {
     const headings = [];
     let isInsideCodeBlock = false;
 
-    const fileStream = createReadStream(filePath);
     const rl = createInterface({
-        input: fileStream,
+        input,
         crlfDelay: Infinity
     });
 
@@ -76,6 +75,10 @@ export async function headingsFromPath(filePath) {
     }
 
     return headings;
+}
+
+export function headingsFromPath(filePath) {
+    return headingsFromStream(createReadStream(filePath));
 }
 
 export async function extractFromPath(filePath, regex) {

@@ -89,15 +89,21 @@ Welcome
   Another section
 ```
 
+It also reads from stdin, so you can pipe content into it:
+
+```bash
+curl -sL https://example.com/doc.md | md-headings
+```
+
 ### Options
 
 ```
-Usage: md-headings [options] <file>
+Usage: md-headings [options] [file]
 
 List headings in a markdown document
 
 Arguments:
-  file             Path to markdown file
+  file             Path to markdown file (reads from stdin if omitted)
 
 Options:
   -V, --version    output the version number

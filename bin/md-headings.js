@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { headingsFromPath } from '../src/index.js';
+import { headingsFromPath, headingsFromStream } from '../src/index.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -14,11 +14,13 @@ program
   .name('md-headings')
   .description('List headings in a markdown document')
   .version(packageJson.version)
-  .argument('<file>', 'Path to markdown file');
+  .argument('[file]', 'Path to markdown file (reads from stdin if omitted)');
 
 program.action(async (file) => {
   try {
-    const headings = await headingsFromPath(file);
+    const headings = file
+      ? await headingsFromPath(file)
+      : await headingsFromStream(process.stdin);
 
     if (headings.length === 0) {
       return;

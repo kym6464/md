@@ -2,7 +2,8 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { headingsFromPath } from '../src/index.js';
+import { Readable } from 'node:stream';
+import { headingsFromPath, headingsFromStream } from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +31,20 @@ describe('headingsFromPath', () => {
 
         assert.deepStrictEqual(headings, [
             { depth: 1, content: 'Document heading' },
+        ]);
+    });
+});
+
+describe('headingsFromStream', () => {
+    it('should parse headings from a readable stream', async () => {
+        const input = Readable.from('# One\n## Two\n### Three\n');
+
+        const headings = await headingsFromStream(input);
+
+        assert.deepStrictEqual(headings, [
+            { depth: 1, content: 'One' },
+            { depth: 2, content: 'Two' },
+            { depth: 3, content: 'Three' },
         ]);
     });
 });
