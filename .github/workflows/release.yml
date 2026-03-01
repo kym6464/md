@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (e.g. v1.1.5)
+        required: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - target: bun-linux-x64
+            os: ubuntu-latest
+          - target: bun-linux-arm64
+            os: ubuntu-latest
+          - target: bun-darwin-arm64
+            os: macos-latest
+          - target: bun-darwin-x64
+            os: macos-latest
+          - target: bun-windows-x64
+            os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Build md-extract
+        run: bun build ./bin/md-extract.js --compile --target=${{ matrix.target }} --outfile dist/md-extract-${{ matrix.target }}
+
+      - name: Build md-headings
+        run: bun build ./bin/md-headings.js --compile --target=${{ matrix.target }} --outfile dist/md-headings-${{ matrix.target }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ matrix.target }}
+          path: dist/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release create "${{ inputs.tag }}" dist/* --title "${{ inputs.tag }}" --generate-notes
