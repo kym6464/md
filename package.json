@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
+    "md": "bin/md.js",
     "md-extract": "bin/md-extract.js",
     "md-headings": "bin/md-headings.js"
   },
