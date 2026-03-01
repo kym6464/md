@@ -1,4 +1,4 @@
-# @kym6464/md-extract
+# @kym6464/md
 
 Extract sections of a markdown file with a regular expression.
 
@@ -6,10 +6,10 @@ Extract sections of a markdown file with a regular expression.
 
 ```bash
 # Install globally
-npm install -g @kym6464/md-extract
+npm install -g @kym6464/md
 
 # Or use with npx (no installation required)
-npx @kym6464/md-extract extract "pattern" document.md
+npx @kym6464/md extract "pattern" document.md
 ```
 
 Standalone binaries are available on the [releases page](https://github.com/kym6464/md-extract/releases) for Linux, macOS, and Windows.
@@ -155,7 +155,7 @@ Options:
 You can also use this as a JavaScript library:
 
 ```javascript
-import { extractFromPath } from "@kym6464/md-extract";
+import { extractFromPath } from "@kym6464/md";
 
 const regex = /Extract me!/i;
 const matches = await extractFromPath("my-document.md", regex);
