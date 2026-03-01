@@ -4,8 +4,6 @@ This document is intended for maintainers of this repository.
 
 ## Releasing
 
-### 1. Run the Release workflow
-
 Go to Actions > Release > Run workflow. Choose `patch`, `minor`, or `major`.
 
 This will:
@@ -18,7 +16,7 @@ This will:
 The release automatically triggers:
 
 - **Homebrew** - updates the formula in [kym6464/homebrew-tap](https://github.com/kym6464/homebrew-tap)
-- **npm** - publishes the package to the npm registry
+- **NPM** - publishes the package to npm [@kym6464/md](https://www.npmjs.com/package/@kym6464/md)
 
 ### Secrets
 
