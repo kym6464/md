@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "md-extract": "bin/md-extract.js"
+    "md-extract": "bin/md-extract.js",
+    "md-headings": "bin/md-headings.js"
   },
   "scripts": {
     "test": "node --test tests/*.test.js"

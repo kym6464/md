@@ -1,7 +1,7 @@
 import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 
-function tryParseHeading(line) {
+export function tryParseHeading(line) {
     let depth = 0;
     
     for (const ch of line) {
@@ -50,6 +50,32 @@ class State {
         this.isWithinMatchedSection = false;
         this.pushCurrent();
     }
+}
+
+export async function headingsFromPath(filePath) {
+    const headings = [];
+    let isInsideCodeBlock = false;
+
+    const fileStream = createReadStream(filePath);
+    const rl = createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    });
+
+    for await (const line of rl) {
+        if (line.startsWith('```')) {
+            isInsideCodeBlock = !isInsideCodeBlock;
+        }
+
+        if (isInsideCodeBlock) continue;
+
+        const heading = tryParseHeading(line);
+        if (heading) {
+            headings.push(heading);
+        }
+    }
+
+    return headings;
 }
 
 export async function extractFromPath(filePath, regex) {

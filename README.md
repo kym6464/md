@@ -78,6 +78,32 @@ Extract content without the heading:
 md-extract --no-print-matched-heading "Summary" report.md
 ```
 
+## md-headings
+
+List all headings in a markdown document, displayed as an indented tree.
+
+```console
+$ md-headings my-document.md
+Welcome
+  Extract me!
+  Another section
+```
+
+### Options
+
+```
+Usage: md-headings [options] <file>
+
+List headings in a markdown document
+
+Arguments:
+  file             Path to markdown file
+
+Options:
+  -V, --version    output the version number
+  -h, --help       display help for command
+```
+
 ## Library Usage
 
 You can also use this as a JavaScript library:
