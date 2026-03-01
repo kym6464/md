@@ -79,6 +79,19 @@ jobs:
           path: dist/
           merge-multiple: true
 
+      - name: Repackage for Homebrew
+        run: |
+          cd dist
+          VERSION="${{ needs.version.outputs.tag }}"
+          VERSION="${VERSION#v}"
+          for f in md-bun-darwin-* md-bun-linux-*; do
+            TARGET="${f#md-bun-}"
+            mv "$f" md
+            chmod +x md
+            tar czf "md-${VERSION}-${TARGET}.tar.gz" md
+            rm md
+          done
+
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

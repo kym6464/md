@@ -1,0 +1,24 @@
+on:
+  release:
+    types: [published]
+
+jobs:
+  homebrew-releaser:
+    runs-on: ubuntu-latest
+    name: homebrew-releaser
+    steps:
+      - name: Release project to Homebrew tap
+        uses: Justintime50/homebrew-releaser@v3
+        with:
+          homebrew_owner: kym6464
+          homebrew_tap: homebrew-tap
+
+          # Fine-grained Personal Access Token that has read-write repo permissions for the repo 
+          # running the action AND Homebrew tap you want to release to.
+          github_token: ${{ secrets.HOMEBREW_PAT }}
+
+          install: 'bin.install "md"'
+          target_darwin_amd64: true
+          target_darwin_arm64: true
+          target_linux_amd64: true
+          target_linux_arm64: true
