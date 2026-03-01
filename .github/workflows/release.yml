@@ -94,6 +94,6 @@ jobs:
 
       - name: Create release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.HOMEBREW_PAT }}
           GH_REPO: ${{ github.repository }}
         run: gh release create "${{ needs.version.outputs.tag }}" dist/* --title "${{ needs.version.outputs.tag }}" --generate-notes
