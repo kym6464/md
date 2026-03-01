@@ -15,15 +15,10 @@ This will:
 3. Repackage the macOS/Linux binaries as tarballs for Homebrew
 4. Create a GitHub release with all artifacts
 
-The release triggers the Homebrew workflow automatically, which updates the formula in [kym6464/homebrew-tap](https://github.com/kym6464/homebrew-tap).
+The release automatically triggers:
 
-### 2. Publish to npm
-
-npm publish requires 2FA, so it must be done manually:
-
-```bash
-npm publish --access public
-```
+- **Homebrew** - updates the formula in [kym6464/homebrew-tap](https://github.com/kym6464/homebrew-tap)
+- **npm** - publishes the package to the npm registry
 
 ### Secrets
 
