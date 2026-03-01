@@ -153,6 +153,18 @@ export function buildHeadingTree(sections) {
         stack.push({ depth, node });
     }
 
+    function rollupChars(nodes) {
+        for (const node of nodes) {
+            if (node.children) {
+                rollupChars(node.children);
+                for (const child of node.children) {
+                    node.chars += child.chars;
+                }
+            }
+        }
+    }
+    rollupChars(root.children);
+
     return root.children;
 }
 

@@ -72,7 +72,7 @@ describe('sectionsFromStream', () => {
 });
 
 describe('buildHeadingTree', () => {
-    it('should nest children under parents by depth', () => {
+    it('should nest children under parents and roll up chars', () => {
         const sections = [
             { heading: 'A', depth: 1, chars: 100 },
             { heading: 'B', depth: 2, chars: 50 },
@@ -84,7 +84,7 @@ describe('buildHeadingTree', () => {
 
         assert.deepStrictEqual(tree, [
             {
-                heading: 'A', chars: 100,
+                heading: 'A', chars: 210,
                 children: [
                     { heading: 'B', chars: 50 },
                     { heading: 'C', chars: 60 },
