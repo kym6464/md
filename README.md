@@ -110,11 +110,11 @@ $ md-headings --format json my-document.md
   {
     "heading": "Welcome",
     "chars": 149,
+    "ownChars": 49,
     "children": [
       { "heading": "Extract me!", "chars": 51 },
       { "heading": "Another section", "chars": 49 }
-    ],
-    "ownChars": 49
+    ]
   }
 ]
 ```
@@ -128,10 +128,10 @@ $ md-headings --format toon my-document.md
 [1]:
   - heading: Welcome
     chars: 149
+    ownChars: 49
     children[2]{heading,chars}:
       Extract me!,51
       Another section,49
-    ownChars: 49
 ```
 
 ### Options

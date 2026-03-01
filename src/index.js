@@ -148,6 +148,7 @@ export function buildHeadingTree(sections) {
 
         const parent = stack[stack.length - 1].node;
         if (!parent.children) {
+            parent.ownChars = parent.chars;
             parent.children = [];
         }
         parent.children.push(node);
