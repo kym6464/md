@@ -1,9 +1,9 @@
-name: Homebrew
+name: Publish to Homebrew
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
-  workflow_dispatch:
 
 jobs:
   homebrew-releaser:
