@@ -81,40 +81,43 @@ export function headingsFromPath(filePath) {
     return headingsFromStream(createReadStream(filePath));
 }
 
-export async function extractFromPath(filePath, regex) {
+export async function extractFromStream(input, regex) {
     const state = new State();
-    
-    const fileStream = createReadStream(filePath);
+
     const rl = createInterface({
-        input: fileStream,
+        input,
         crlfDelay: Infinity
     });
-    
+
     for await (const line of rl) {
         if (line.startsWith('```')) {
             state.isInsideCodeBlock = !state.isInsideCodeBlock;
         }
-        
+
         if (!state.isInsideCodeBlock) {
             const heading = tryParseHeading(line);
-            
+
             if (heading) {
                 if (heading.depth <= state.depth) {
                     state.exitMatchedSection();
                 }
-                
+
                 if (!state.isWithinMatchedSection && regex.test(heading.content)) {
                     state.enterMatchedSection(heading);
                 }
             }
         }
-        
+
         if (state.isWithinMatchedSection) {
             state.current.push(line);
         }
     }
-    
+
     state.pushCurrent();
-    
+
     return state.matches;
+}
+
+export function extractFromPath(filePath, regex) {
+    return extractFromStream(createReadStream(filePath), regex);
 }

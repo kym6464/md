@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { extractFromPath } from '../src/index.js';
+import { extractFromPath, extractFromStream } from '../src/index.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -15,7 +15,7 @@ program
   .description('Extract sections of a markdown file with a regular expression')
   .version(packageJson.version)
   .argument('<pattern>', 'Pattern to match against headings')
-  .argument('<file>', 'Path to markdown file')
+  .argument('[file]', 'Path to markdown file (reads from stdin if omitted)')
   .option('-a, --all', 'Print all matching sections (don\'t quit after first match)', false)
   .option('-s, --case-sensitive', 'Treat pattern as case sensitive', false)
   .option('-n, --no-print-matched-heading', 'Do not include the matched heading in the output');
@@ -25,7 +25,9 @@ program.action(async (pattern, file, options) => {
     const regexFlags = options.caseSensitive ? '' : 'i';
     const regex = new RegExp(pattern, regexFlags);
     
-    const matches = await extractFromPath(file, regex);
+    const matches = file
+      ? await extractFromPath(file, regex)
+      : await extractFromStream(process.stdin, regex);
     
     if (matches.length === 0) {
       console.error(`No matches found for pattern: ${pattern}`);

@@ -2,7 +2,8 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extractFromPath } from '../src/index.js';
+import { Readable } from 'node:stream';
+import { extractFromPath, extractFromStream } from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,5 +37,16 @@ describe('extract functionality', () => {
 
         // Then
         assert.strictEqual(matches.length, 0);
+    });
+});
+
+describe('extractFromStream', () => {
+    it('should extract a matching section from a stream', async () => {
+        const input = Readable.from('# Intro\nHello\n## Target\nContent\n## Other\nNope\n');
+
+        const matches = await extractFromStream(input, createRegex('Target'));
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['## Target', 'Content']);
     });
 });
