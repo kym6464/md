@@ -1,6 +1,6 @@
 {
   "name": "@kym6464/md",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "A markdown CLI that enables efficiently exploring markdown content and extracting sections.",
   "main": "src/index.js",
   "type": "module",
