@@ -4,11 +4,7 @@
   "description": "Extract sections of a markdown file with a regular expression",
   "main": "src/index.js",
   "type": "module",
-  "bin": {
-    "md": "bin/md.js",
-    "md-extract": "bin/md-extract.js",
-    "md-headings": "bin/md-headings.js"
-  },
+  "bin": "bin/index.js",
   "scripts": {
     "test": "node --test tests/*.test.js"
   },

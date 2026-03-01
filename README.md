@@ -9,8 +9,10 @@ Extract sections of a markdown file with a regular expression.
 npm install -g @kym6464/md-extract
 
 # Or use with npx (no installation required)
-npx @kym6464/md-extract "pattern" document.md
+npx @kym6464/md-extract extract "pattern" document.md
 ```
+
+Standalone binaries are available on the [releases page](https://github.com/kym6464/md-extract/releases) for Linux, macOS, and Windows.
 
 ## Usage
 
@@ -33,29 +35,28 @@ This won't match the pattern.
 You can extract the second section with the following command:
 
 ```console
-$ md-extract "Extract me!" my-document.md
+$ md extract "Extract me!" my-document.md
 ## Extract me!
 
 This section should be pulled out.
 ```
 
-## Options
+## md extract
 
 ```
-Usage: md-extract [options] <pattern> <file>
+Usage: md extract [options] <pattern> [file]
 
 Extract sections of a markdown file with a regular expression
 
 Arguments:
   pattern                         Pattern to match against headings
-  file                            Path to markdown file
+  file                            Path to markdown file (reads from stdin if omitted)
 
 Options:
-  -V, --version                   output the version number
   -a, --all                       Print all matching sections (don't quit after first match)
   -s, --case-sensitive            Treat pattern as case sensitive
   -n, --no-print-matched-heading  Do not include the matched heading in the output
-  --depth <number>                Include child headings up to <number> levels deep
+  --no-children                   Exclude content under child headings
   -h, --help                      display help for command
 ```
 
@@ -64,33 +65,33 @@ Options:
 Extract all sections matching a pattern:
 
 ```bash
-md-extract --all "^API" documentation.md
+md extract --all "^API" documentation.md
 ```
 
 Case-sensitive matching:
 
 ```bash
-md-extract --case-sensitive "TODO" project.md
+md extract --case-sensitive "TODO" project.md
 ```
 
 Extract content without the heading:
 
 ```bash
-md-extract --no-print-matched-heading "Summary" report.md
+md extract --no-print-matched-heading "Summary" report.md
 ```
 
 Extract only direct content, excluding child sections:
 
 ```bash
-md-extract --depth 0 "Welcome" my-document.md
+md extract --no-children "Welcome" my-document.md
 ```
 
-## md-headings
+## md headings
 
 List all headings in a markdown document, displayed as an indented tree.
 
 ```console
-$ md-headings my-document.md
+$ md headings my-document.md
 Welcome
   Extract me!
   Another section
@@ -99,13 +100,13 @@ Welcome
 It also reads from stdin, so you can pipe content into it:
 
 ```bash
-curl -sL https://example.com/doc.md | md-headings
+curl -sL https://example.com/doc.md | md headings
 ```
 
 Use `--format json` to get a nested tree with character counts per section (useful for AI agents deciding how to read content):
 
 ```console
-$ md-headings --format json my-document.md
+$ md headings --format json my-document.md
 [
   {
     "heading": "Welcome",
@@ -119,12 +120,12 @@ $ md-headings --format json my-document.md
 ]
 ```
 
-Parent nodes include `ownChars` — the character count excluding children. Use this to predict how much content `md-extract --depth 0` will return.
+Parent nodes include `ownChars` — the character count excluding children. Use this to predict how much content `md extract --no-children` will return.
 
 Or `--format toon` for a more compact representation:
 
 ```console
-$ md-headings --format toon my-document.md
+$ md headings --format toon my-document.md
 [1]:
   - heading: Welcome
     chars: 149
@@ -137,7 +138,7 @@ $ md-headings --format toon my-document.md
 ### Options
 
 ```
-Usage: md-headings [options] [file]
+Usage: md headings [options] [file]
 
 List headings in a markdown document
 
@@ -145,7 +146,6 @@ Arguments:
   file                  Path to markdown file (reads from stdin if omitted)
 
 Options:
-  -V, --version         output the version number
   -f, --format <type>   Output format: plain, json, toon (default: "plain")
   -h, --help            display help for command
 ```
