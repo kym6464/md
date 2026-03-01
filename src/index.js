@@ -26,6 +26,7 @@ class State {
     constructor() {
         this.matches = [];
         this.isWithinMatchedSection = false;
+        this.isWithinChildSection = false;
         this.isInsideCodeBlock = false;
         this.depth = 0;
         this.current = null;
@@ -157,6 +158,7 @@ export function buildHeadingTree(sections) {
         for (const node of nodes) {
             if (node.children) {
                 rollupChars(node.children);
+                node.ownChars = node.chars;
                 for (const child of node.children) {
                     node.chars += child.chars;
                 }
@@ -168,7 +170,7 @@ export function buildHeadingTree(sections) {
     return root.children;
 }
 
-export async function extractFromStream(input, regex) {
+export async function extractFromStream(input, regex, { noChildren } = {}) {
     const state = new State();
 
     const rl = createInterface({
@@ -186,16 +188,19 @@ export async function extractFromStream(input, regex) {
 
             if (heading) {
                 if (heading.depth <= state.depth) {
+                    state.isWithinChildSection = false;
                     state.exitMatchedSection();
                 }
 
                 if (!state.isWithinMatchedSection && regex.test(heading.content)) {
                     state.enterMatchedSection(heading);
+                } else if (state.isWithinMatchedSection && noChildren && heading.depth > state.depth) {
+                    state.isWithinChildSection = true;
                 }
             }
         }
 
-        if (state.isWithinMatchedSection) {
+        if (state.isWithinMatchedSection && !state.isWithinChildSection) {
             state.current.push(line);
         }
     }
@@ -205,6 +210,6 @@ export async function extractFromStream(input, regex) {
     return state.matches;
 }
 
-export function extractFromPath(filePath, regex) {
-    return extractFromStream(createReadStream(filePath), regex);
+export function extractFromPath(filePath, regex, options) {
+    return extractFromStream(createReadStream(filePath), regex, options);
 }

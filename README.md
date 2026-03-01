@@ -55,6 +55,7 @@ Options:
   -a, --all                       Print all matching sections (don't quit after first match)
   -s, --case-sensitive            Treat pattern as case sensitive
   -n, --no-print-matched-heading  Do not include the matched heading in the output
+  --no-children                   Exclude content under child headings
   -h, --help                      display help for command
 ```
 
@@ -76,6 +77,12 @@ Extract content without the heading:
 
 ```bash
 md-extract --no-print-matched-heading "Summary" report.md
+```
+
+Extract only direct content, excluding child sections:
+
+```bash
+md-extract --no-children "Welcome" my-document.md
 ```
 
 ## md-headings
@@ -102,14 +109,17 @@ $ md-headings --format json my-document.md
 [
   {
     "heading": "Welcome",
-    "chars": 86,
+    "chars": 149,
     "children": [
-      { "heading": "Extract me!", "chars": 62 },
-      { "heading": "Another section", "chars": 56 }
-    ]
+      { "heading": "Extract me!", "chars": 51 },
+      { "heading": "Another section", "chars": 49 }
+    ],
+    "ownChars": 49
   }
 ]
 ```
+
+Parent nodes include `ownChars` — the character count excluding children. Use this to predict how much content `md-extract --no-children` will return.
 
 Or `--format toon` for a more compact representation:
 
@@ -117,10 +127,11 @@ Or `--format toon` for a more compact representation:
 $ md-headings --format toon my-document.md
 [1]:
   - heading: Welcome
-    chars: 86
+    chars: 149
     children[2]{heading,chars}:
-      Extract me!,62
-      Another section,56
+      Extract me!,51
+      Another section,49
+    ownChars: 49
 ```
 
 ### Options

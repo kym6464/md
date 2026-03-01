@@ -49,4 +49,31 @@ describe('extractFromStream', () => {
         assert.strictEqual(matches.length, 1);
         assert.deepStrictEqual(matches[0], ['## Target', 'Content']);
     });
+
+    it('should include children by default', async () => {
+        const input = Readable.from('# Parent\nDirect content\n## Child\nChild content\n# Sibling\n');
+
+        const matches = await extractFromStream(input, createRegex('Parent'));
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# Parent', 'Direct content', '## Child', 'Child content']);
+    });
+
+    it('should exclude children when noChildren is true', async () => {
+        const input = Readable.from('# Parent\nDirect content\n## Child\nChild content\n# Sibling\n');
+
+        const matches = await extractFromStream(input, createRegex('Parent'), { noChildren: true });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# Parent', 'Direct content']);
+    });
+
+    it('should resume collecting after child section ends at same depth', async () => {
+        const input = Readable.from('# A\nA content\n## B\nB content\n# C\nC content\n');
+
+        const matches = await extractFromStream(input, createRegex('A'), { noChildren: true });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# A', 'A content']);
+    });
 });

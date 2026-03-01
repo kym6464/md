@@ -84,7 +84,7 @@ describe('buildHeadingTree', () => {
 
         assert.deepStrictEqual(tree, [
             {
-                heading: 'A', chars: 210,
+                heading: 'A', chars: 210, ownChars: 100,
                 children: [
                     { heading: 'B', chars: 50 },
                     { heading: 'C', chars: 60 },
