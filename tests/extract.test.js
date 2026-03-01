@@ -59,10 +59,10 @@ describe('extractFromStream', () => {
         assert.deepStrictEqual(matches[0], ['# Parent', 'Direct content', '## Child', 'Child content']);
     });
 
-    it('should exclude children when noChildren is true', async () => {
+    it('should exclude children when depth is 0', async () => {
         const input = Readable.from('# Parent\nDirect content\n## Child\nChild content\n# Sibling\n');
 
-        const matches = await extractFromStream(input, createRegex('Parent'), { noChildren: true });
+        const matches = await extractFromStream(input, createRegex('Parent'), { depth: 0 });
 
         assert.strictEqual(matches.length, 1);
         assert.deepStrictEqual(matches[0], ['# Parent', 'Direct content']);
@@ -71,9 +71,45 @@ describe('extractFromStream', () => {
     it('should resume collecting after child section ends at same depth', async () => {
         const input = Readable.from('# A\nA content\n## B\nB content\n# C\nC content\n');
 
-        const matches = await extractFromStream(input, createRegex('A'), { noChildren: true });
+        const matches = await extractFromStream(input, createRegex('A'), { depth: 0 });
 
         assert.strictEqual(matches.length, 1);
         assert.deepStrictEqual(matches[0], ['# A', 'A content']);
+    });
+
+    it('should include immediate children but exclude grandchildren when depth is 1', async () => {
+        const input = Readable.from('# A\nA content\n## B\nB content\n### C\nC content\n## D\nD content\n');
+
+        const matches = await extractFromStream(input, createRegex('A'), { depth: 1 });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# A', 'A content', '## B', 'B content', '## D', 'D content']);
+    });
+
+    it('should include two levels of children when depth is 2', async () => {
+        const input = Readable.from('# A\nA content\n## B\nB content\n### C\nC content\n#### D\nD content\n## E\nE content\n');
+
+        const matches = await extractFromStream(input, createRegex('A'), { depth: 2 });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# A', 'A content', '## B', 'B content', '### C', 'C content', '## E', 'E content']);
+    });
+
+    it('should resume including content after exiting a too-deep section', async () => {
+        const input = Readable.from('## A\nA content\n### B\nB content\n#### C\nC content\n### D\nD content\n');
+
+        const matches = await extractFromStream(input, createRegex('A'), { depth: 1 });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['## A', 'A content', '### B', 'B content', '### D', 'D content']);
+    });
+
+    it('should include everything when depth is large enough', async () => {
+        const input = Readable.from('# A\nA content\n## B\nB content\n### C\nC content\n');
+
+        const matches = await extractFromStream(input, createRegex('A'), { depth: 10 });
+
+        assert.strictEqual(matches.length, 1);
+        assert.deepStrictEqual(matches[0], ['# A', 'A content', '## B', 'B content', '### C', 'C content']);
     });
 });

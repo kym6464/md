@@ -19,14 +19,14 @@ program
   .option('-a, --all', 'Print all matching sections (don\'t quit after first match)', false)
   .option('-s, --case-sensitive', 'Treat pattern as case sensitive', false)
   .option('-n, --no-print-matched-heading', 'Do not include the matched heading in the output')
-  .option('--no-children', 'Exclude content under child headings');
+  .option('--depth <number>', 'Include child headings up to <number> levels deep');
 
 program.action(async (pattern, file, options) => {
   try {
     const regexFlags = options.caseSensitive ? '' : 'i';
     const regex = new RegExp(pattern, regexFlags);
     
-    const extractOptions = { noChildren: options.children === false };
+    const extractOptions = { depth: options.depth != null ? Number(options.depth) : undefined };
     const matches = file
       ? await extractFromPath(file, regex, extractOptions)
       : await extractFromStream(process.stdin, regex, extractOptions);

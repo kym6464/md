@@ -171,7 +171,7 @@ export function buildHeadingTree(sections) {
     return root.children;
 }
 
-export async function extractFromStream(input, regex, { noChildren } = {}) {
+export async function extractFromStream(input, regex, { depth } = {}) {
     const state = new State();
 
     const rl = createInterface({
@@ -195,8 +195,8 @@ export async function extractFromStream(input, regex, { noChildren } = {}) {
 
                 if (!state.isWithinMatchedSection && regex.test(heading.content)) {
                     state.enterMatchedSection(heading);
-                } else if (state.isWithinMatchedSection && noChildren && heading.depth > state.depth) {
-                    state.isWithinChildSection = true;
+                } else if (state.isWithinMatchedSection && depth != null) {
+                    state.isWithinChildSection = (heading.depth - state.depth) > depth;
                 }
             }
         }

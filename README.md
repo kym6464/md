@@ -55,7 +55,7 @@ Options:
   -a, --all                       Print all matching sections (don't quit after first match)
   -s, --case-sensitive            Treat pattern as case sensitive
   -n, --no-print-matched-heading  Do not include the matched heading in the output
-  --no-children                   Exclude content under child headings
+  --depth <number>                Include child headings up to <number> levels deep
   -h, --help                      display help for command
 ```
 
@@ -82,7 +82,7 @@ md-extract --no-print-matched-heading "Summary" report.md
 Extract only direct content, excluding child sections:
 
 ```bash
-md-extract --no-children "Welcome" my-document.md
+md-extract --depth 0 "Welcome" my-document.md
 ```
 
 ## md-headings
@@ -119,7 +119,7 @@ $ md-headings --format json my-document.md
 ]
 ```
 
-Parent nodes include `ownChars` — the character count excluding children. Use this to predict how much content `md-extract --no-children` will return.
+Parent nodes include `ownChars` — the character count excluding children. Use this to predict how much content `md-extract --depth 0` will return.
 
 Or `--format toon` for a more compact representation:
 
