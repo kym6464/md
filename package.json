@@ -1,7 +1,7 @@
 {
-  "name": "@kym6464/md-extract",
+  "name": "@kym6464/md",
   "version": "2.0.0",
-  "description": "Extract sections of a markdown file with a regular expression",
+  "description": "A markdown CLI that enables efficiently exploring markdown content and extracting sections.",
   "main": "src/index.js",
   "type": "module",
   "bin": "bin/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kym6464/md-extract.git"
+    "url": "git+https://github.com/kym6464/md.git"
   },
   "keywords": [
     "markdown",
@@ -22,9 +22,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kym6464/md-extract/issues"
+    "url": "https://github.com/kym6464/md/issues"
   },
-  "homepage": "https://github.com/kym6464/md-extract#readme",
+  "homepage": "https://github.com/kym6464/md#readme",
   "dependencies": {
     "@toon-format/toon": "^2.1.0",
     "commander": "^12.0.0"
