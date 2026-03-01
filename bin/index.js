@@ -3,17 +3,11 @@
 import { program } from 'commander';
 import { extractFromPath, extractFromStream, headingsFromPath, headingsFromStream, sectionsFromPath, sectionsFromStream, buildHeadingTree } from '../src/index.js';
 import { encode } from '@toon-format/toon';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+import { version } from '../package.json';
 
 program
   .name('md')
-  .version(packageJson.version);
+  .version(version);
 
 const extract = program.command('extract')
   .description('Extract sections of a markdown file with a regular expression')

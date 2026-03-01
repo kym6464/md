@@ -3,18 +3,12 @@
 import { program } from 'commander';
 import { headingsFromPath, headingsFromStream, sectionsFromPath, sectionsFromStream, buildHeadingTree } from '../src/index.js';
 import { encode } from '@toon-format/toon';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+import { version } from '../package.json';
 
 program
   .name('md-headings')
   .description('List headings in a markdown document')
-  .version(packageJson.version)
+  .version(version)
   .argument('[file]', 'Path to markdown file (reads from stdin if omitted)')
   .option('-f, --format <type>', 'Output format (plain, json, toon)', 'plain');
 

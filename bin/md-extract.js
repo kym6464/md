@@ -2,18 +2,12 @@
 
 import { program } from 'commander';
 import { extractFromPath, extractFromStream } from '../src/index.js';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+import { version } from '../package.json';
 
 program
   .name('md-extract')
   .description('Extract sections of a markdown file with a regular expression')
-  .version(packageJson.version)
+  .version(version)
   .argument('<pattern>', 'Pattern to match against headings')
   .argument('[file]', 'Path to markdown file (reads from stdin if omitted)')
   .option('-a, --all', 'Print all matching sections (don\'t quit after first match)', false)
