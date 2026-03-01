@@ -98,7 +98,7 @@ jobs:
       - name: Create release
         env:
           # GITHUB_TOKEN events don't trigger other workflows; use a PAT so the
-          # release event triggers the homebrew.yml workflow.
+          # release event triggers downstream workflows.
           GH_TOKEN: ${{ secrets.HOMEBREW_PAT }}
           GH_REPO: ${{ github.repository }}
         run: gh release create "${{ needs.version.outputs.tag }}" dist/* --title "${{ needs.version.outputs.tag }}" --generate-notes
