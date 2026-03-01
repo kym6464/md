@@ -86,6 +86,7 @@ jobs:
           VERSION="${VERSION#v}"
           for f in md-bun-darwin-* md-bun-linux-*; do
             TARGET="${f#md-bun-}"
+            TARGET="${TARGET/x64/amd64}"
             mv "$f" md
             chmod +x md
             tar czf "md-${VERSION}-${TARGET}.tar.gz" md
