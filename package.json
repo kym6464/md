@@ -4,7 +4,7 @@
   "description": "A markdown CLI that enables efficiently exploring markdown content and extracting sections.",
   "main": "src/index.js",
   "type": "module",
-  "bin": "bin/index.js",
+  "bin": "src/cli.js",
   "scripts": {
     "test": "node --test tests/*.test.js"
   },
