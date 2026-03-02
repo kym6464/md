@@ -3,7 +3,7 @@
 import { program } from 'commander';
 import { extractFromPath, extractFromStream, headingsFromPath, headingsFromStream, sectionsFromPath, sectionsFromStream, buildHeadingTree } from './index.js';
 import { encode } from '@toon-format/toon';
-import { version } from '../package.json';
+import { version } from '../package.json' with { type: 'json' };
 
 program
   .name('md')
