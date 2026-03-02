@@ -3,7 +3,9 @@
 import { program } from 'commander';
 import { extractFromPath, extractFromStream, headingsFromPath, headingsFromStream, sectionsFromPath, sectionsFromStream, buildHeadingTree } from './index.js';
 import { encode } from '@toon-format/toon';
-import { version } from '../package.json' with { type: 'json' };
+
+import pkg from '../package.json' with { type: 'json' };
+const { version } = pkg;
 
 program
   .name('md')
