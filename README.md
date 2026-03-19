@@ -48,6 +48,25 @@ $ md extract "Extract me!" my-document.md
 This section should be pulled out.
 ```
 
+For sites that provide a `.md` URL (e.g. documentation with a "View as Markdown" option), such as https://example.com/docs/settings, you can pipe the content directly into `md` to explore it remotely:
+
+```console
+$ curl -s "https://example.com/docs/settings.md" | md headings
+Settings
+  Configuration scopes
+    Available scopes
+    When to use each scope
+  Settings files
+    Available settings
+```
+
+```console
+$ curl -s "https://example.com/docs/settings.md" | md extract "Configuration scopes"
+## Configuration scopes
+
+Configure settings at the user, project, or workspace level...
+```
+
 ## md extract
 
 ```
