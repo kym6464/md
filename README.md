@@ -5,8 +5,7 @@ A markdown CLI that enables efficiently exploring markdown content and extractin
 ## Installation
 
 ```bash
-brew tap kym6464/tap
-brew install md
+brew install kym6464/tap/md
 ```
 
 Or via npm:
