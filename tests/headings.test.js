@@ -49,6 +49,39 @@ describe('headingsFromStream', () => {
     });
 });
 
+describe('link stripping', () => {
+    it('should keep only the text of linked headings', async () => {
+        const input = Readable.from('# [Don\'t Be a Meat Proxy](https://example.com/post/)\n## See [the docs](https://example.com) for more\n');
+
+        const headings = await headingsFromStream(input);
+
+        assert.deepStrictEqual(headings, [
+            { depth: 1, content: 'Don\'t Be a Meat Proxy' },
+            { depth: 2, content: 'See the docs for more' },
+        ]);
+    });
+
+    it('should keep the alt text of images', async () => {
+        const input = Readable.from('# ![Logo](logo.png) Project\n');
+
+        const headings = await headingsFromStream(input);
+
+        assert.deepStrictEqual(headings, [
+            { depth: 1, content: 'Logo Project' },
+        ]);
+    });
+
+    it('should leave bracketed text without a target untouched', async () => {
+        const input = Readable.from('# [Draft] Release notes\n');
+
+        const headings = await headingsFromStream(input);
+
+        assert.deepStrictEqual(headings, [
+            { depth: 1, content: '[Draft] Release notes' },
+        ]);
+    });
+});
+
 describe('sectionsFromStream', () => {
     it('should return sections with character counts', async () => {
         const input = Readable.from('# Intro\nHello world\n## Details\nSome details\n');

@@ -1,6 +1,12 @@
 import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 
+const INLINE_LINK = /!?\[([^\]]*)\]\([^)]*\)/g;
+
+function stripLinks(text) {
+    return text.replace(INLINE_LINK, '$1');
+}
+
 export function tryParseHeading(line) {
     let depth = 0;
     
@@ -18,7 +24,7 @@ export function tryParseHeading(line) {
     
     return {
         depth,
-        content: line.slice(depth).trim()
+        content: stripLinks(line.slice(depth).trim())
     };
 }
 
